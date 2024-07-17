@@ -52,115 +52,110 @@ public class Trade implements Listener {
   private EntityPickupItemEventListener entityPickupListener;
 
   public Trade(Player p1, Player p2) {
-    player1 = p1;
-    player2 = p2;
-    location1 = p1.getLocation();
-    location2 = p2.getLocation();
-    pl.getTaskFactory()
-        .newChain()
-        .sync(
-            () -> {
-              inv1 = InvUtils.getTradeInventory(player1, player2);
-              inv2 = InvUtils.getTradeInventory(player2, player1);
-              spectatorInv = InvUtils.getSpectatorInventory(player1, player2);
-            })
-        .async(
-            () -> {
-              if (pl.getTradeConfig().isSpectateEnabled()
-                  && pl.getTradeConfig().isSpectateBroadcast())
-                Bukkit.getOnlinePlayers()
-                    .forEach(
-                        p -> {
-                          if (p.hasPermission("tradeplus.admin")
-                              && !p.hasPermission("tradeplus.admin.silent")) {
-                            pl.getTradeConfig()
-                                .getSpectateMessage()
-                                .setOnClick(
-                                    "/tradeplus spectate "
-                                        + player1.getName()
-                                        + " "
-                                        + player2.getName())
-                                .send(
-                                    p,
-                                    "%PLAYER1%",
-                                    player1.getName(),
-                                    "%PLAYER2%",
-                                    player2.getName());
-                          }
-                        });
-              if (pl.getConfig().getBoolean("extras.economy.enabled", true)
-                  && pl.getServer().getPluginManager().isPluginEnabled("Vault")) {
-                try {
-                  if (pl.getServer()
-                          .getServicesManager()
-                          .getRegistration(Class.forName("net.milkbowl.vault.economy.Economy"))
-                      != null) {
-                    extras.add(new EconomyExtra(player1, player2, pl, this));
-                  }
-                } catch (Exception ignored) {
+    this.player1 = p1;
+    this.player2 = p2;
+    this.location1 = p1.getLocation();
+    this.location2 = p2.getLocation();
+
+    new BukkitRunnable() {
+      @Override
+      public void run() {
+        inv1 = InvUtils.getTradeInventory(player1, player2);
+        inv2 = InvUtils.getTradeInventory(player2, player1);
+        spectatorInv = InvUtils.getSpectatorInventory(player1, player2);
+
+        new BukkitRunnable() {
+          @Override
+          public void run() {
+            if (pl.getTradeConfig().isSpectateEnabled() && pl.getTradeConfig().isSpectateBroadcast()) {
+              Bukkit.getOnlinePlayers().forEach(p -> {
+                if (p.hasPermission("tradeplus.admin") && !p.hasPermission("tradeplus.admin.silent")) {
+                  pl.getTradeConfig()
+                          .getSpectateMessage()
+                          .setOnClick("/tradeplus spectate " + player1.getName() + " " + player2.getName())
+                          .send(p, "%PLAYER1%", player1.getName(), "%PLAYER2%", player2.getName());
                 }
-              }
-              if (pl.getConfig().getBoolean("extras.experience.enabled", true)) {
-                extras.add(new ExperienceExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.playerpoints.enabled", true)
-                  && pl.getServer().getPluginManager().isPluginEnabled("PlayerPoints")) {
-                extras.add(new PlayerPointsExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.griefprevention.enabled", true)
-                  && pl.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
-                extras.add(new GriefPreventionExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.enjinpoints.enabled", false)
-                  && pl.getServer().getPluginManager().isPluginEnabled("EnjinMinecraftPlugin")) {
-                extras.add(new EnjinPointsExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.tokenenchant.enabled", true)
-                  && pl.getServer().getPluginManager().isPluginEnabled("TokenEnchant")) {
-                extras.add(new TokenEnchantExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.tokenmanager.enabled", true)
-                  && pl.getServer().getPluginManager().isPluginEnabled("TokenManager")) {
-                extras.add(new TokenManagerExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.beasttoken.enabled", true)
-                      && pl.getServer().getPluginManager().isPluginEnabled("BeastToken")) {
-                extras.add(new BeastTokensExtra(player1, player2, pl, this));
-              }
-              if (pl.getConfig().getBoolean("extras.votingplugin.enabled", false)
-                  && pl.getServer().getPluginManager().isPluginEnabled("VotingPlugin")) {
-                extras.add(new VotingPluginExtra(player1, player2, pl, this));
-              }
-            })
-        .sync(
-            () -> {
-              Bukkit.getServer().getPluginManager().registerEvents(this, pl);
+              });
+            }
+
+            if (pl.getConfig().getBoolean("extras.economy.enabled", true) && pl.getServer().getPluginManager().isPluginEnabled("Vault")) {
               try {
-                Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
-                entityPickupListener = new EntityPickupItemEventListener(this);
-                Bukkit.getServer().getPluginManager().registerEvents(entityPickupListener, pl);
-              } catch (ClassNotFoundException ignored) {
+                if (pl.getServer().getServicesManager().getRegistration(Class.forName("net.milkbowl.vault.economy.Economy")) != null) {
+                  extras.add(new EconomyExtra(player1, player2, pl, Trade.this));
+                }
+              } catch (Exception ignored) {
               }
+            }
 
-              this.mySlots = pl.getTradeConfig().getMySlots();
-              this.theirSlots = pl.getTradeConfig().getTheirSlots();
-              this.myExtraSlots = pl.getTradeConfig().getMyExtraSlots();
-              this.theirExtraSlots = pl.getTradeConfig().getTheirExtraSlots();
+            if (pl.getConfig().getBoolean("extras.experience.enabled", true)) {
+              extras.add(new ExperienceExtra(player1, player2, pl, Trade.this));
+            }
 
-              for (Extra extra : extras) {
-                extra.init();
+            if (pl.getConfig().getBoolean("extras.playerpoints.enabled", true) && pl.getServer().getPluginManager().isPluginEnabled("PlayerPoints")) {
+              extras.add(new PlayerPointsExtra(player1, player2, pl, Trade.this));
+            }
+
+            if (pl.getConfig().getBoolean("extras.griefprevention.enabled", true) && pl.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
+              extras.add(new GriefPreventionExtra(player1, player2, pl, Trade.this));
+            }
+
+            if (pl.getConfig().getBoolean("extras.enjinpoints.enabled", false) && pl.getServer().getPluginManager().isPluginEnabled("EnjinMinecraftPlugin")) {
+              extras.add(new EnjinPointsExtra(player1, player2, pl, Trade.this));
+            }
+
+            if (pl.getConfig().getBoolean("extras.tokenenchant.enabled", true) && pl.getServer().getPluginManager().isPluginEnabled("TokenEnchant")) {
+              extras.add(new TokenEnchantExtra(player1, player2, pl, Trade.this));
+            }
+
+            if (pl.getConfig().getBoolean("extras.tokenmanager.enabled", true) && pl.getServer().getPluginManager().isPluginEnabled("TokenManager")) {
+              extras.add(new TokenManagerExtra(player1, player2, pl, Trade.this));
+            }
+
+            if (pl.getConfig().getBoolean("extras.beasttoken.enabled", true) && pl.getServer().getPluginManager().isPluginEnabled("BeastToken")) {
+              extras.add(new BeastTokensExtra(player1, player2, pl, Trade.this));
+            }
+
+            if (pl.getConfig().getBoolean("extras.votingplugin.enabled", false) && pl.getServer().getPluginManager().isPluginEnabled("VotingPlugin")) {
+              extras.add(new VotingPluginExtra(player1, player2, pl, Trade.this));
+            }
+
+            new BukkitRunnable() {
+              @Override
+              public void run() {
+                Bukkit.getServer().getPluginManager().registerEvents(Trade.this, pl);
+                try {
+                  Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
+                  entityPickupListener = new EntityPickupItemEventListener(Trade.this);
+                  Bukkit.getServer().getPluginManager().registerEvents(entityPickupListener, pl);
+                } catch (ClassNotFoundException ignored) {
+                }
+
+                mySlots = pl.getTradeConfig().getMySlots();
+                theirSlots = pl.getTradeConfig().getTheirSlots();
+                myExtraSlots = pl.getTradeConfig().getMyExtraSlots();
+                theirExtraSlots = pl.getTradeConfig().getTheirExtraSlots();
+
+                for (Extra extra : extras) {
+                  extra.init();
+                }
+                updateExtras();
+
+                updateAcceptance();
+
+                new BukkitRunnable() {
+                  @Override
+                  public void run() {
+                    pl.ongoingTrades.add(Trade.this);
+                    player1.openInventory(inv1);
+                    player2.openInventory(inv2);
+                  }
+                }.runTask(pl);
               }
-              updateExtras();
-
-              updateAcceptance();
-            })
-        .sync(
-            () -> {
-              pl.ongoingTrades.add(this);
-              player1.openInventory(inv1);
-              player2.openInventory(inv2);
-            })
-        .execute();
+            }.runTask(pl);
+          }
+        }.runTaskAsynchronously(pl);
+      }
+    }.runTask(pl);
   }
 
   private static List<ItemStack> combine(ItemStack[] items) {
