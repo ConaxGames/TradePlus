@@ -18,45 +18,41 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-
         <repository>
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
-
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
-
         <repository>
             <id>dakani</id>
             <url>https://repo.dakanilabs.com/repository/maven-public/</url>
         </repository>
-
         <repository>
             <id>minebench-repo</id>
             <url>https://repo.minebench.de/</url>
         </repository>
-
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-
         <repository>
             <id>savagefactions-repo</id>
             <url>https://cdn.jsdelivr.net/gh/ProSavage/SavageFactions@1.6.x/</url>
         </repository>
-
         <repository>
             <id>aikar</id>
             <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
-
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
     </repositories>
 
@@ -64,52 +60,45 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.21-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>21.0</version>
+            <version>LATEST</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.5</version>
+            <version>LATEST</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
-            <groupId>com.github.WesJD.AnvilGUI</groupId>
+            <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>478e0c196e</version>
+            <version>1.10.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>co.aikar</groupId>
             <artifactId>taskchain-bukkit</artifactId>
             <version>3.7.2</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
@@ -117,7 +106,6 @@
             <scope>system</scope>
             <systemPath>${res}/GriefPrevention.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>org.black_ixx</groupId>
             <artifactId>PlayerPoints</artifactId>
@@ -125,7 +113,6 @@
             <scope>system</scope>
             <systemPath>${res}/PlayerPointsNew.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>BeastTokens</groupId>
             <artifactId>BeastTokens</artifactId>
@@ -133,7 +120,6 @@
             <scope>system</scope>
             <systemPath>${res}/BeastTokensAPI.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>com.enjin.mc</groupId>
             <artifactId>enjin-mc-plugin</artifactId>
@@ -141,7 +127,6 @@
             <scope>system</scope>
             <systemPath>${res}/EnjinMinecraftPlugin.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>com.vk2gpz.tokenenchant</groupId>
             <artifactId>api</artifactId>
@@ -149,7 +134,6 @@
             <scope>system</scope>
             <systemPath>${res}/TokenEnchantAPI.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>com.github.kicjow</groupId>
             <artifactId>Crazy-Crates</artifactId>
@@ -157,7 +141,6 @@
             <scope>system</scope>
             <systemPath>${res}/CrazyCrates.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>com.github.Realizedd</groupId>
             <artifactId>TokenManager</artifactId>
@@ -165,27 +148,23 @@
             <scope>system</scope>
             <systemPath>${res}/TokenManager.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>com.github.ProSavage</groupId>
             <artifactId>SavageFactions</artifactId>
             <version>1.6.3-RC</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.codemc.worldguardwrapper</groupId>
             <artifactId>worldguardwrapper</artifactId>
             <version>1.1.6-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.Angeschossen</groupId>
             <artifactId>LandsAPI</artifactId>
             <version>4.5.2.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.github.Ben12345rocks</groupId>
             <artifactId>VotingPlugin</artifactId>
@@ -193,7 +172,6 @@
             <scope>system</scope>
             <systemPath>${res}/VotingPlugin.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>com.earth2me</groupId>
             <artifactId>essentials</artifactId>
@@ -218,7 +196,7 @@
             <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.18.12.0</version>
+                <version>1.18.20.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -239,7 +217,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
